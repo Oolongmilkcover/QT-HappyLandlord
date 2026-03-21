@@ -252,14 +252,21 @@ Cards Strategy::getGreaterCards(PlayHand type)
                 return bombs[i];
             }
         }
-        // 搜索当前玩家手中有没有王炸
+        // 搜索当前玩家手中有没有王炸（必须同时有大小王）
         Cards sj = findSamePointcards(Card::Card_SJ, 1);
         Cards bj = findSamePointcards(Card::Card_BJ, 1);
         if(!sj.isEmpty() && !bj.isEmpty())
         {
             Cards jokers;
             jokers << sj << bj;
-            return jokers;
+            // 关键修复：王炸需要判断能否击败目标牌型（只有炸弹/王炸才能被王炸击败）
+            if(PlayHand(jokers).canBeat(type)){
+                return jokers;
+            }
+        }
+        // 关键修复：如果目标牌型是炸弹/王炸，单张王牌直接返回空（不参与比对）
+        if(type.getHandType() == PlayHand::Hand_Bomb || type.getHandType() == PlayHand::Hand_Bomb_Jokers){
+            return Cards();
         }
     }
     //2. 当前玩家和下一个玩家不是一伙的
@@ -347,9 +354,9 @@ Cards Strategy::findSamePointcards(Card::CardPoint point, int count)
     if(count < 1 || count > 4|| point == Card::Card_Begin || point == Card::Card_End ){
         return Cards();
     }
-    //大小王
-    if(point ==Card::Card_SJ||point == Card::Card_BJ){
-        if(count < 1){
+    // 大小王修复：只能取1张，且count必须为1（大王/小王不可能有2张及以上）
+    if((point == Card::Card_SJ || point == Card::Card_BJ)){
+        if(count != 1){ // 大小王只能取1张，count≠1直接返回空
             return Cards();
         }
         Card card;
