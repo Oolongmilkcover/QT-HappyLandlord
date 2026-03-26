@@ -7,6 +7,7 @@
   - [项目特性](#项目特性)
     - [单机版](#单机版)
     - [联机版](#联机版)
+  - [快速开始](#快速开始)
   - [核心技术栈](#核心技术栈)
   - [系统架构设计](#系统架构设计)
     - [单机版架构](#单机版架构)
@@ -62,6 +63,15 @@
 - 客户端与服务端通过 JSON 协议通信
 - 支持心跳包保持连接
 - 实时同步玩家出牌、叫地主与分数信息
+
+## 快速开始
+- :Landlords-Online-version内的Client和Server
+- Landlords-Single-player-version的app
+- 内都要在文件夹内部署运行所需的文件
+- shift加右键打开Powershell窗口,exe文件需要自己改
+  ```bash
+  windeployqt.ext .\Landlords.exe
+  ```
 
 ## 核心技术栈
 | 技术项 | 版本/规范要求 | 说明 |
@@ -327,7 +337,7 @@ make -j8
 ./release/HappyLandlords
 ```
 ### 3. 部署发布
-1. Windows
+1. Windows（这里的exe是实际文件夹内的exe）
 ```bash
 windeployqt --release --compiler-runtime HappyLandlords.exe
 ```
